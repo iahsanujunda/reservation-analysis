@@ -8,6 +8,7 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.apache.storm.windowing.TupleWindow;
+import org.apache.log4j.Logger;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,8 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SlidingWindowFrequentBolt extends BaseWindowedBolt {
+  private static final Logger LOG = Logger
+      .getLogger(SlidingWindowFrequentBolt.class);
+
   private OutputCollector collector;
   private Map<String, Integer> counts;
+  private String window;
 
   @Override
   public void prepare(Map stormConf, TopologyContext context,
@@ -35,13 +40,17 @@ public class SlidingWindowFrequentBolt extends BaseWindowedBolt {
   @Override
   public void execute(TupleWindow inputWindow) {
 
-    Integer count = null;
-    String destsched;
+    Integer count;
     List<Tuple> newTuple = inputWindow.getNew();
     List<Tuple> oldTuple = inputWindow.getExpired();
 
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    Date date = new Date();
+
+    window = dateFormat.format(date);
+
     for (Tuple tuple : newTuple) {
-      destsched = tuple.getStringByField("destinationschedule");
+      String destsched = tuple.getStringByField("destinationschedule");
       Integer freqflyer = tuple.getIntegerByField("freqflyer");
 
       if (freqflyer == 1) {
@@ -55,7 +64,7 @@ public class SlidingWindowFrequentBolt extends BaseWindowedBolt {
     }
 
     for (Tuple tuple : oldTuple) {
-      destsched = tuple.getStringByField("destinationschedule");
+      String destsched = tuple.getStringByField("destinationschedule");
       Integer freqflyer = tuple.getIntegerByField("freqflyer");
 
       if (freqflyer == 1) {
@@ -66,31 +75,29 @@ public class SlidingWindowFrequentBolt extends BaseWindowedBolt {
 
         counts.put(destsched, count);
       }
+    }
+
+    for (String destsched : counts.keySet()) {
+      count = counts.get(destsched);
       collector.emit(new Values(destsched, count));
     }
 
-    // System.out.println("============================\n");
     // printWindow();
     // printDestschedCount();
-    // System.out.println("============================\n");
-    // System.out.println("Events in current window: " +
-    // inputWindow.get().size());
-    // System.out.println("============================\n\n\n");
+    // LOG.info("Events in current window: " + inputWindow.get().size());
+    // LOG.info("End of window\n\n\n\n\n\n");
 
   }
 
-  // private void printDestschedCount() {
-  // for (String destsched : counts.keySet()) {
-  // System.out.println(String.format("%s has count of frequent flyer of %s",
-  // destsched,
-  // counts.get(destsched)));
-  // }
-  // }
-  //
-  // private void printWindow() {
-  // DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-  // Date date = new Date();
-  // System.out.println("window : " + dateFormat.format(date));
-  // }
+  private void printDestschedCount() {
+    for (String destsched : counts.keySet()) {
+      LOG.info(String.format("%s has frequent count of %s", destsched,
+          counts.get(destsched)));
+    }
+  }
+
+  private void printWindow() {
+    LOG.info("window: " + window);
+  }
 
 }

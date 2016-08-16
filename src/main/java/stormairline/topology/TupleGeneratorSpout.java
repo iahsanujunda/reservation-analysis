@@ -9,8 +9,6 @@ import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
 import org.apache.commons.io.IOUtils;
 
-import stormairline.utils.DatasetList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +18,9 @@ import java.nio.charset.Charset;
 public class TupleGeneratorSpout extends BaseRichSpout {
 
   // Instantiate variables
-  private ArrayList<String> reservations = new ArrayList<String>();
+  private List<String> reservations;
   private int nextEmitIndex;
   private SpoutOutputCollector outputCollector;
-  private DatasetList dshm;
 
   // Declare all the output fields of this spout
   @Override
@@ -39,26 +36,23 @@ public class TupleGeneratorSpout extends BaseRichSpout {
     this.outputCollector = collector;
     this.nextEmitIndex = 0;
 
-    dshm = new DatasetList();
-
-//    try {
-//      // read line-by-line from a file called dataset.txt
-//      reservations =
-//          IOUtils.readLines(ClassLoader
-//              .getSystemResourceAsStream("dataset.txt"), Charset
-//              .defaultCharset().name());
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
+    try {
+      // read line-by-line from a file called dataset.txt
+      reservations =
+          IOUtils.readLines(ClassLoader
+              .getSystemResourceAsStream("dataset.txt"), Charset
+              .defaultCharset().name());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   // Iterate this procedure through tuple stream
   @Override
   public void nextTuple() {
-    List<String> reservations = dshm.getDataset();
 
     // set delay time between each tuple process
-    Utils.sleep(4);
+    Utils.sleep(2);
     String reservation = reservations.get(nextEmitIndex);
 
     // Define which column of dataset becomes which field of tuple
@@ -78,7 +72,7 @@ public class TupleGeneratorSpout extends BaseRichSpout {
     // back to 0 and let the spout sleep for 100ms.
     if (nextEmitIndex == reservations.size() - 1) {
       nextEmitIndex = 0;
-      Utils.sleep(100);
+      Utils.sleep(18);
     } else {
       nextEmitIndex = nextEmitIndex + 1;
     }
