@@ -10,6 +10,7 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
 import stormairline.utils.DestinationHashmap;
+import stormairline.utils.DatasetList;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,12 +44,22 @@ public class TransformDestSchedBolt extends BaseBasicBolt {
   public void execute(Tuple tuple, BasicOutputCollector collector) {
     HashMap<String, ArrayList<String>> hm = dhm.getMultimap();
 
+    // Parse tuples from kafka
+    // String reservation = tuple.getString(0);
+    // String[] parts = reservation.split(",");
+
+    // init kafka into variable
+    // String time = parts[0];
+    // int schedule = Integer.parseInt(parts[1]);
+    // String destination = parts[3];
+    // int freqflyer = Integer.parseInt(parts[4]);
+
     // initialize tuples into variables
     String time = tuple.getStringByField("time");
     Integer schedule = tuple.getIntegerByField("schedule");
     String destination = tuple.getStringByField("destination");
     Integer freqflyer = tuple.getIntegerByField("freqflyer");
-    
+
     // extract month from flight schedules, january becomes JAN, february
     // becomes FEB, so on
     String scheduleAsString = String.valueOf(schedule);

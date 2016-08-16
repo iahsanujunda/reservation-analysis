@@ -9,6 +9,9 @@ import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
 import org.apache.commons.io.IOUtils;
 
+import stormairline.utils.DatasetList;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -17,9 +20,10 @@ import java.nio.charset.Charset;
 public class TupleGeneratorSpout extends BaseRichSpout {
 
   // Instantiate variables
-  private List<String> reservations;
+  private ArrayList<String> reservations = new ArrayList<String>();
   private int nextEmitIndex;
   private SpoutOutputCollector outputCollector;
+  private DatasetList dshm;
 
   // Declare all the output fields of this spout
   @Override
@@ -35,22 +39,26 @@ public class TupleGeneratorSpout extends BaseRichSpout {
     this.outputCollector = collector;
     this.nextEmitIndex = 0;
 
-    try {
-      // read line-by-line from a file called dataset.txt
-      reservations =
-          IOUtils.readLines(ClassLoader
-              .getSystemResourceAsStream("dataset.txt"), Charset
-              .defaultCharset().name());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    dshm = new DatasetList();
+
+//    try {
+//      // read line-by-line from a file called dataset.txt
+//      reservations =
+//          IOUtils.readLines(ClassLoader
+//              .getSystemResourceAsStream("dataset.txt"), Charset
+//              .defaultCharset().name());
+//    } catch (IOException e) {
+//      throw new RuntimeException(e);
+//    }
   }
 
   // Iterate this procedure through tuple stream
   @Override
   public void nextTuple() {
+    List<String> reservations = dshm.getDataset();
+
     // set delay time between each tuple process
-    Utils.sleep(30);
+    Utils.sleep(4);
     String reservation = reservations.get(nextEmitIndex);
 
     // Define which column of dataset becomes which field of tuple
@@ -68,7 +76,7 @@ public class TupleGeneratorSpout extends BaseRichSpout {
     // increase the index of line to emit tuples from, unless the index exceed
     // the number of lines within raw dataset, in which case set the emitindex
     // back to 0 and let the spout sleep for 100ms.
-    if (nextEmitIndex == reservations.size()) {
+    if (nextEmitIndex == reservations.size() - 1) {
       nextEmitIndex = 0;
       Utils.sleep(100);
     } else {

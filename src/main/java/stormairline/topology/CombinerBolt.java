@@ -21,11 +21,18 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.windowing.TupleWindow;
 
 public class CombinerBolt extends BaseWindowedBolt {
+  private OutputCollector collector;
   private Map<String, Integer> map;
 
   @Override
   public void declareOutputFields(OutputFieldsDeclarer declarer) {
     declarer.declare(new Fields("destsched", "count"));
+  }
+
+  @Override
+  public void prepare(Map stormConf, TopologyContext context,
+      OutputCollector collector) {
+    this.collector = collector;
   }
 
   @Override
@@ -38,6 +45,7 @@ public class CombinerBolt extends BaseWindowedBolt {
       Integer count = tuple.getIntegerByField("count");
 
       map.put(destsched, count);
+      collector.ack(tuple);
     }
 
     System.out.println("============================");

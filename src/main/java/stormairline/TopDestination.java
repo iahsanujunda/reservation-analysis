@@ -49,10 +49,10 @@ public class TopDestination
         new CombinerBolt().withTumblingWindow(new Duration(EMIT_RATE,
             TimeUnit.SECONDS)), 1)
 .globalGrouping("window-general");
-    builder.setBolt(
-        "combiner-frequent",
-        new CombinerBolt().withTumblingWindow(new Duration(EMIT_RATE,
-            TimeUnit.SECONDS)), 1).globalGrouping("window-frequent");
+    // builder.setBolt(
+    // "combiner-frequent",
+    // new CombinerBolt().withTumblingWindow(new Duration(EMIT_RATE,
+    // TimeUnit.SECONDS)), 1).globalGrouping("window-frequent");
 
 
     // Declare run configuration

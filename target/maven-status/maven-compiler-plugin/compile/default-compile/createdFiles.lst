@@ -2,7 +2,9 @@ stormairline/topology/TupleGeneratorSpout.class
 stormairline/topology/SlidingWindowGeneralBolt.class
 stormairline/topology/SlidingWindowFrequentBolt.class
 stormairline/TopDestination.class
+stormairline/TopDestinationKafka.class
 stormairline/topology/CombinerBolt.class
 stormairline/topology/TransformDestSchedBolt.class
 stormairline/topology/CountFlightnum.class
 stormairline/utils/DestinationHashmap.class
+stormairline/utils/DatasetList.class
