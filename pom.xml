@@ -26,9 +26,9 @@
       <groupId>org.apache.storm</groupId>
       <artifactId>storm-core</artifactId>
       <version>1.0.1</version>
-      <scope>compile</scope>
+      <!-- <scope>compile</scope> -->
       <!-- scope provided is used for production cluster -->
-      <!-- <scope>provided</scope> -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>

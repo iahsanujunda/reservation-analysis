@@ -31,20 +31,20 @@ public class TopDestination
     // Declare topology and streaming
     TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("generate-tuples", new TupleGeneratorSpout(), 1);
+    builder.setSpout("generate-tuples", new TupleGeneratorSpout(), 2);
 
-    builder.setBolt("transform-destinations", new TransformDestSchedBolt(), 1)
+    builder.setBolt("transform-destinations", new TransformDestSchedBolt(), 3)
         .shuffleGrouping("generate-tuples");
     builder.setBolt(
         "window-general",
         new SlidingWindowGeneralBolt().withWindow(new Duration(40,
-            TimeUnit.SECONDS), new Duration(EMIT_RATE, TimeUnit.SECONDS)), 1)
+            TimeUnit.SECONDS), new Duration(EMIT_RATE, TimeUnit.SECONDS)), 3)
         .fieldsGrouping("transform-destinations",
             new Fields("destinationschedule"));
     builder.setBolt(
         "window-frequent",
         new SlidingWindowFrequentBolt().withWindow(new Duration(40,
-            TimeUnit.SECONDS), new Duration(EMIT_RATE, TimeUnit.SECONDS)), 1)
+            TimeUnit.SECONDS), new Duration(EMIT_RATE, TimeUnit.SECONDS)), 3)
         .fieldsGrouping("transform-destinations",
             new Fields("destinationschedule"));
 
