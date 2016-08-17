@@ -22,9 +22,9 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.windowing.TupleWindow;
 
-public class CombinerBolt extends BaseWindowedBolt {
+public class RankerBolt extends BaseWindowedBolt {
   private static final Logger LOG = Logger
-.getLogger(CombinerBolt.class);
+.getLogger(RankerBolt.class);
 
   private OutputCollector collector;
   private Map<String, Integer> map;
@@ -59,18 +59,20 @@ public class CombinerBolt extends BaseWindowedBolt {
     Map<String, Integer> sortedMap = sortByValue(map);
 
     // To print out all destinations
-    // for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
-    // LOG.info(entry.getKey() + " has count of " + entry.getValue());
-    // }
-    
-    // To print out only top N destinations
-    Iterator it = sortedMap.entrySet().iterator();
-    
-    for (int N = 0; N < 21; N++) {
-      Map.Entry pair = (Map.Entry) it.next();
-      LOG.info(pair.getKey() + " has count of " + pair.getValue());
-      it.remove();
+    for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+      LOG.info(entry.getKey() + " has count of " + entry.getValue());
     }
+
+    // To print out only top N destinations
+    // Iterator it = sortedMap.entrySet().iterator();
+    //
+    // for (int N = 0; N < 21; N++) {
+    // Map.Entry pair = (Map.Entry) it.next();
+    // LOG.info(pair.getKey() + " has count of " + pair.getValue());
+    // it.remove();
+    // }
+
+
 
     LOG.info("End of window\n\n\n\n\n\n");
 

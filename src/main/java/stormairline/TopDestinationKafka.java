@@ -22,7 +22,7 @@ import org.apache.storm.utils.Utils;
 import stormairline.topology.SlidingWindowFrequentBolt;
 import stormairline.topology.SlidingWindowGeneralBolt;
 import stormairline.topology.TransformDestSchedBolt;
-import stormairline.topology.CombinerBolt;
+import stormairline.topology.RankerBolt;
 
 public class TopDestinationKafka
 {
@@ -64,7 +64,7 @@ public class TopDestinationKafka
             new Fields("destinationschedule"));
     builder.setBolt(
         "combiner-general",
-        new CombinerBolt().withTumblingWindow(new Duration(EMIT_RATE,
+        new RankerBolt().withTumblingWindow(new Duration(EMIT_RATE,
             TimeUnit.SECONDS)), 1)
 .globalGrouping("window-general");
 //    builder.setBolt(
