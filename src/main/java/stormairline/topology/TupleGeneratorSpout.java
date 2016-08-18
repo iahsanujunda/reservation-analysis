@@ -52,7 +52,7 @@ public class TupleGeneratorSpout extends BaseRichSpout {
   public void nextTuple() {
 
     // set delay time between each tuple process
-    // Utils.sleep(2);
+    // Utils.sleep(1);
     String reservation = reservations.get(nextEmitIndex);
 
     // Define which column of dataset becomes which field of tuple

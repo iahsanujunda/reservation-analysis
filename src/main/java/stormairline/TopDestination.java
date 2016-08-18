@@ -23,7 +23,7 @@ public class TopDestination
 {
   private static int TUPLE_TIMEOUT = 60;
   private static int EMIT_RATE = 10;
-  private static int WINDOW_LENGTH = 15000;
+  private static int WINDOW_LENGTH = 20000;
   private static int SLIDING_INTERVAL = 2000;
 
   public static void main(String[] args) throws Exception {
@@ -33,7 +33,7 @@ public class TopDestination
 
     builder.setSpout("generate-tuples", new TupleGeneratorSpout(), 2);
 
-    builder.setBolt("transform-destinations", new TransformDestSchedBolt(), 3)
+    builder.setBolt("transform-destinations", new TransformDestSchedBolt(), 2)
         .shuffleGrouping("generate-tuples");
     // builder.setBolt(
     // "window-general",
@@ -54,18 +54,18 @@ public class TopDestination
     builder.setBolt(
         "window-general",
         new SlidingWindowGeneralBolt().withWindow(new Count(WINDOW_LENGTH),
-            new Count(SLIDING_INTERVAL)), 3).fieldsGrouping(
+            new Count(SLIDING_INTERVAL)), 1).fieldsGrouping(
         "transform-destinations", new Fields("destinationschedule"));
-    builder.setBolt(
-        "window-frequent",
-        new SlidingWindowFrequentBolt().withWindow(new Count(WINDOW_LENGTH),
-            new Count(SLIDING_INTERVAL)), 3).fieldsGrouping(
-        "transform-destinations", new Fields("destinationschedule"));
+    // builder.setBolt(
+    // "window-frequent",
+    // new SlidingWindowFrequentBolt().withWindow(new Count(WINDOW_LENGTH),
+    // new Count(SLIDING_INTERVAL)), 3).fieldsGrouping(
+    // "transform-destinations", new Fields("destinationschedule"));
 
     // Combine and Rank
-    builder.setBolt("combiner-general",
-        new RankerBolt().withTumblingWindow(new Duration(9, TimeUnit.SECONDS)),
-        1).globalGrouping("window-general");
+    // builder.setBolt("combiner-general",
+    // new RankerBolt().withTumblingWindow(new Duration(9, TimeUnit.SECONDS)),
+    // 1).globalGrouping("window-general");
     // builder.setBolt(
     // "combiner-frequent",
     // new RankerBolt()

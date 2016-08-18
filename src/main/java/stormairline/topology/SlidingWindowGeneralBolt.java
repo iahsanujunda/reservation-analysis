@@ -78,10 +78,10 @@ public class SlidingWindowGeneralBolt extends BaseWindowedBolt {
       collector.emit(new Values(destsched, count));
     }
 
-    // printWindow();
-    // printDestschedCount();
-    // LOG.info("Events in current window: " + inputWindow.get().size());
-    // LOG.info("End of window\n\n\n\n\n\n");
+    printWindow();
+    printDestschedCount();
+    LOG.info("Events in current window: " + inputWindow.get().size());
+    LOG.info("End of window\n\n\n\n\n\n");
 
   }
 
