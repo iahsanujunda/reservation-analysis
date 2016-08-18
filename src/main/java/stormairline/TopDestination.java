@@ -14,7 +14,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
 
 import stormairline.topology.SlidingWindowFrequentBolt;
-import stormairline.topology.SlidingWindowGeneralBolt;
+import stormairline.topology.SlidingWindowAllBolt;
 import stormairline.topology.TransformDestSchedBolt;
 import stormairline.topology.TupleGeneratorSpout;
 import stormairline.topology.RankerBolt;
@@ -23,8 +23,8 @@ public class TopDestination
 {
   private static int TUPLE_TIMEOUT = 60;
   private static int EMIT_RATE = 10;
-  private static int WINDOW_LENGTH = 20000;
-  private static int SLIDING_INTERVAL = 2000;
+  private static int WINDOW_LENGTH = 60000;
+  private static int SLIDING_INTERVAL = 10000;
 
   public static void main(String[] args) throws Exception {
 
@@ -52,15 +52,15 @@ public class TopDestination
     // Data Testing Purpose; use tuple count as window limit, instead of
     // time duration
     builder.setBolt(
-        "window-general",
-        new SlidingWindowGeneralBolt().withWindow(new Count(WINDOW_LENGTH),
+        "window-all",
+        new SlidingWindowAllBolt().withWindow(new Count(WINDOW_LENGTH),
             new Count(SLIDING_INTERVAL)), 1).fieldsGrouping(
         "transform-destinations", new Fields("destinationschedule"));
-    // builder.setBolt(
-    // "window-frequent",
-    // new SlidingWindowFrequentBolt().withWindow(new Count(WINDOW_LENGTH),
-    // new Count(SLIDING_INTERVAL)), 3).fieldsGrouping(
-    // "transform-destinations", new Fields("destinationschedule"));
+    builder.setBolt(
+        "window-frequent",
+        new SlidingWindowFrequentBolt().withWindow(new Count(WINDOW_LENGTH),
+            new Count(SLIDING_INTERVAL)), 1).fieldsGrouping(
+        "transform-destinations", new Fields("destinationschedule"));
 
     // Combine and Rank
     // builder.setBolt("combiner-general",

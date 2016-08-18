@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
-public class SlidingWindowGeneralBolt extends BaseWindowedBolt {
+public class SlidingWindowAllBolt extends BaseWindowedBolt {
   private static final Logger LOG = Logger
       .getLogger(SlidingWindowGeneralBolt.class);
 

@@ -20,7 +20,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
 
 import stormairline.topology.SlidingWindowFrequentBolt;
-import stormairline.topology.SlidingWindowGeneralBolt;
+import stormairline.topology.SlidingWindowAllBolt;
 import stormairline.topology.TransformDestSchedBolt;
 import stormairline.topology.RankerBolt;
 
@@ -52,7 +52,7 @@ public class TopDestinationKafka
         .shuffleGrouping("kafka-spout");
     builder.setBolt(
         "window-general",
-        new SlidingWindowGeneralBolt().withWindow(new Duration(40,
+        new SlidingWindowAllBolt().withWindow(new Duration(40,
             TimeUnit.SECONDS), new Duration(EMIT_RATE, TimeUnit.SECONDS)), 3)
         .fieldsGrouping("transform-destinations",
             new Fields("destinationschedule"));
