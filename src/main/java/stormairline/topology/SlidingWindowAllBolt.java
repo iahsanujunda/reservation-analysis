@@ -20,7 +20,7 @@ import java.util.List;
 
 public class SlidingWindowAllBolt extends BaseWindowedBolt {
   private static final Logger LOG = Logger
-      .getLogger(SlidingWindowGeneralBolt.class);
+      .getLogger(SlidingWindowAllBolt.class);
 
   private OutputCollector collector;
   private Map<String, Integer> counts;
@@ -78,10 +78,10 @@ public class SlidingWindowAllBolt extends BaseWindowedBolt {
       collector.emit(new Values(destsched, count));
     }
 
-    printWindow();
-    printDestschedCount();
-    LOG.info("Events in current window: " + inputWindow.get().size());
-    LOG.info("End of window\n\n\n\n\n\n");
+    // printWindow();
+    // printDestschedCount();
+    // LOG.info("Events in current window: " + inputWindow.get().size());
+    // LOG.info("End of window\n\n\n\n\n\n");
 
   }
 

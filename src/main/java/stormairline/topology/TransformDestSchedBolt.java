@@ -67,23 +67,23 @@ public class TransformDestSchedBolt extends BaseBasicBolt {
     String monthThreeDigit = month.substring(0, 3);
 
     // testing purpose: emit format airportcode_month instead of city_month
-    String destsched = destination.concat("_").concat(monthThreeDigit);
-    collector.emit(new Values(time, destsched, freqflyer));
+    // String destsched = destination.concat("_").concat(monthThreeDigit);
+    // collector.emit(new Values(time, destsched, freqflyer));
 
     // Loop through the content of destinationHashmap to look up city name from
     // airport code
-    // outloop: for (Map.Entry<String, String> entry : hm.entrySet()) {
-    // String airport = entry.getKey();
-    //
-    // if (destination.contains(airport)) {
-    // String cityname = entry.getValue();
-    //
-    // String destsched = cityname.concat("_").concat(monthThreeDigit);
-    // collector.emit(new Values(time, destsched, freqflyer));
-    //
-    // break outloop;
-    // }
-    // }
+    outloop: for (Map.Entry<String, String> entry : hm.entrySet()) {
+      String airport = entry.getKey();
+
+      if (destination.contains(airport)) {
+        String cityname = entry.getValue();
+
+        String destsched = cityname.concat("_").concat(monthThreeDigit);
+        collector.emit(new Values(time, destsched, freqflyer));
+
+        break outloop;
+      }
+    }
   }
 
   // method to extract month from integer format

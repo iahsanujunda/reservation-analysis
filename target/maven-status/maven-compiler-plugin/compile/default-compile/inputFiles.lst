@@ -3,7 +3,7 @@
 /Users/Fuuko/Documents/PGT/MSc Project/code/repos/reservation-analysis/src/main/java/stormairline/topology/CountFlightnum.java
 /Users/Fuuko/Documents/PGT/MSc Project/code/repos/reservation-analysis/src/main/java/stormairline/topology/TupleGeneratorSpout.java
 /Users/Fuuko/Documents/PGT/MSc Project/code/repos/reservation-analysis/src/main/java/stormairline/TopDestinationKafka.java
-/Users/Fuuko/Documents/PGT/MSc Project/code/repos/reservation-analysis/src/main/java/stormairline/topology/SlidingWindowGeneralBolt.java
 /Users/Fuuko/Documents/PGT/MSc Project/code/repos/reservation-analysis/src/main/java/stormairline/utils/DestinationHashmap.java
 /Users/Fuuko/Documents/PGT/MSc Project/code/repos/reservation-analysis/src/main/java/stormairline/topology/SlidingWindowFrequentBolt.java
+/Users/Fuuko/Documents/PGT/MSc Project/code/repos/reservation-analysis/src/main/java/stormairline/topology/SlidingWindowAllBolt.java
 /Users/Fuuko/Documents/PGT/MSc Project/code/repos/reservation-analysis/src/main/java/stormairline/topology/TransformDestSchedBolt.java
