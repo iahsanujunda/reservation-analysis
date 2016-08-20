@@ -31,18 +31,16 @@ public class TopDestination
     // Declare topology and streaming
     TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("generate-tuples", new TupleGeneratorSpout(), 1)
-        .setNumTasks(3);
+    builder.setSpout("generate-tuples", new TupleGeneratorSpout());
 
     builder.setBolt("transform-destinations", new TransformDestSchedBolt(), 1)
-        .setNumTasks(1).shuffleGrouping("generate-tuples");
+        .shuffleGrouping("generate-tuples");
     builder.setBolt(
         "window-all",
         new SlidingWindowAllBolt().withWindow(
             new Duration(40,
                 TimeUnit.SECONDS), new Duration(EMIT_RATE, TimeUnit.SECONDS)),
             1)
-        .setNumTasks(1)
         .fieldsGrouping("transform-destinations",
             new Fields("destinationschedule"));
     builder.setBolt(
@@ -50,7 +48,6 @@ public class TopDestination
         new SlidingWindowFrequentBolt().withWindow(new Duration(40,
                 TimeUnit.SECONDS), new Duration(EMIT_RATE, TimeUnit.SECONDS)),
             1)
-        .setNumTasks(1)
         .fieldsGrouping("transform-destinations",
             new Fields("destinationschedule"));
 
@@ -71,13 +68,14 @@ public class TopDestination
     // Combine and Rank
     builder.setBolt("ranker-all",
         new RankerBolt().withTumblingWindow(new Duration(9, TimeUnit.SECONDS)),
- 1).setNumTasks(1)
+        1)
         .globalGrouping("window-all");
     builder
         .setBolt(
             "ranker-frequent",
             new RankerBolt().withTumblingWindow(new Duration(9,
-                TimeUnit.SECONDS)), 1).setNumTasks(1)
+ TimeUnit.SECONDS)),
+        1)
         .globalGrouping("window-frequent");
 
 

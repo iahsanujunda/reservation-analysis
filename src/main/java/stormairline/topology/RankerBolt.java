@@ -59,18 +59,18 @@ public class RankerBolt extends BaseWindowedBolt {
     Map<String, Integer> sortedMap = sortByValue(map);
 
     // To print out all destinations
-    // for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
-    // LOG.info(entry.getKey() + " has count of " + entry.getValue());
-    // }
+    for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+      LOG.info(entry.getKey() + " has count of " + entry.getValue());
+    }
 
     // To print out only top N destinations
-    Iterator it = sortedMap.entrySet().iterator();
-
-    for (int N = 0; N < 21; N++) {
-      Map.Entry pair = (Map.Entry) it.next();
-      LOG.info(pair.getKey() + " has count of " + pair.getValue());
-      it.remove();
-    }
+    // Iterator it = sortedMap.entrySet().iterator();
+    //
+    // for (int N = 0; N < 21; N++) {
+    // Map.Entry pair = (Map.Entry) it.next();
+    // LOG.info(pair.getKey() + " has count of " + pair.getValue());
+    // it.remove();
+    // }
 
 
 
