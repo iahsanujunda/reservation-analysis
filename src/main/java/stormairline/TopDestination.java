@@ -31,7 +31,8 @@ public class TopDestination
     // Declare topology and streaming
     TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("generate-tuples", new TupleGeneratorSpout(), 1);
+    builder.setSpout("generate-tuples", new TupleGeneratorSpout(), 1)
+        .setNumTasks(3);
 
     builder.setBolt("transform-destinations", new TransformDestSchedBolt(), 1)
         .setNumTasks(1).shuffleGrouping("generate-tuples");
@@ -74,7 +75,7 @@ public class TopDestination
         .globalGrouping("window-all");
     builder
         .setBolt(
-            "combiner-frequent",
+            "ranker-frequent",
             new RankerBolt().withTumblingWindow(new Duration(9,
                 TimeUnit.SECONDS)), 1).setNumTasks(1)
         .globalGrouping("window-frequent");
@@ -88,7 +89,7 @@ public class TopDestination
     if (args != null && args.length > 0) {
 
       // submit to remote cluster
-      conf.put(Config.TOPOLOGY_WORKERS, 3);
+      conf.put(Config.TOPOLOGY_WORKERS, 1);
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf,
           builder.createTopology());
